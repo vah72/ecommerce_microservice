@@ -27,7 +27,7 @@ def shipment_details_update(uname):
     ship_dict['Address'] = val1['data']['Address']
     ship_dict['Email Id'] = val1['data']['Email Id']
     ### Data is ready for calling the shipment_updates API.
-    url = 'http://127.0.0.1:5000/shipment_updates/'
+    url = 'http://127.0.0.1:8003/shipment_updates/'
     data = json.dumps(ship_dict)
     headers = {'Content-Type': 'application/json'}
     response = requests.post(url, data=data, headers=headers)

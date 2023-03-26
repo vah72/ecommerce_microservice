@@ -74,4 +74,4 @@ def shipment_status(request):
                 resp['status'] = 'Failed'
                 resp['status_code'] = '400'
                 resp['message'] = 'User data is not available.'
-    return HttpResponse(json.dumps(resp), content_type = 'application/json')
+    return HttpResponse(json.dumps(resp), content_type ='application/json')

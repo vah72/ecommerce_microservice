@@ -18,4 +18,6 @@ from django.urls import path
 from ship_status.views import shipment_status, shipment_reg_update
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('shipment_status', shipment_status),
+    path('shipment_updates/', shipment_reg_update)
 ]

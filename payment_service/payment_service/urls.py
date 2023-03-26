@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from payment.views import get_payment, user_transaction_info
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('initiate_payment/', get_payment),
+    path('payment_status/', user_transaction_info),
 
 ]

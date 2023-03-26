@@ -52,8 +52,6 @@ def get_payment(request):
     return HttpResponse(json.dumps(resp), content_type='application/json')
 ### This function is created for getting the username and password.
 @ csrf_exempt
-
-
 def user_transaction_info(request):
     # uname = request.POST.get("User Name")
     resp = {}
