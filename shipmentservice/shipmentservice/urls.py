@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from ship_status.views import shipment_status, shipment_reg_update
+from ship_status.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('shipment_status', shipment_status),
-    path('shipment_updates/', shipment_reg_update)
+    path('shipment_updates/', shipment_reg_update),
+    path('get_all_shipment/', getAllShipment),
 ]

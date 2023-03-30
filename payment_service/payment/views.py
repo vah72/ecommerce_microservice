@@ -5,37 +5,32 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from payment.models import payment_status as paystat
 from shipment_update.views import shipment_details_update as ship_update
-
+import requests
 
 ### This function is for fetching the user data.
 def get_transaction_details(uname):
-    user = paystat.objects.filter(username=uname)
-    for data in user.values():
+    payment = paystat.objects.filter(username=uname)
+    for data in payment.values():
         return data
 
 
-def store_data(uname, prodid, price, quantity, mode_of_payment, mobile):
-    user_data = paystat(username=uname, product_id=prodid, price=
-    price, quantity=quantity, mode_of_payment=mode_of_payment, mobile=
-                        mobile, status="Success")
-    user_data.save()
+def store_data(uname, orderid):
+    payment_data = paystat(username=uname, order_id=orderid, status="Success")
+    payment_data.save()
     return 1
 
 
 @csrf_exempt
-def get_payment(request):
+def get_payment(request ):
     uname = request.POST.get("User Name")
-    prodid = request.POST.get("Product id")
-    price = request.POST.get("Product price")
-    quantity = request.POST.get("Product quantity")
-    mode_of_payment = request.POST.get("Payment mode")
-    mobile = request.POST.get("Mobile Number")
+    orderid = request.POST.get("Order id")
     resp = {}
-    if uname and prodid and price and quantity and mode_of_payment and mobile:
-        respdata = store_data(uname, prodid, price, quantity, mode_of_payment, mobile)
-        respdata2 = ship_update(uname)
+    if uname and orderid :
+        respdata = store_data(uname, orderid)
+        respdata2 = ship_update(uname, orderid)
 ### If it returns value then will show success.
         if respdata:
+            order_update(orderid=orderid)
             resp['status'] = 'Success'
             resp['status_code'] = '200'
             resp['message'] = 'Transaction is completed.'
@@ -51,7 +46,13 @@ def get_payment(request):
         resp['message'] = 'All fields are mandatory.'
     return HttpResponse(json.dumps(resp), content_type='application/json')
 ### This function is created for getting the username and password.
-@ csrf_exempt
+
+def order_update(orderid):
+    url = "http://127.0.0.1:8005/update_order/{}".format(orderid)
+    response = requests.delete(url)
+
+
+@csrf_exempt
 def user_transaction_info(request):
     # uname = request.POST.get("User Name")
     resp = {}
@@ -85,4 +86,17 @@ def user_transaction_info(request):
     # resp['status'] = 'Failed'
     # resp['status_code'] = '400'
     # resp['message'] = 'Request type is not matched.'
+    return HttpResponse(json.dumps(resp), content_type='application/json')
+
+
+def getAllPayment(request) :
+    resp = {}
+    data = []
+    if request.method == 'GET':
+        list_pay = paystat.objects.all()
+        for pay in list_pay.values():
+            data.append(pay)
+            resp['status'] = 'Success'
+            resp['status_code'] = '200'
+            resp['data'] = data
     return HttpResponse(json.dumps(resp), content_type='application/json')

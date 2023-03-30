@@ -3,6 +3,7 @@ from django.http import HttpResponse
 
 from django.shortcuts import render
 import json
+import requests
 from django.views.decorators.csrf import csrf_exempt
 from product_model.models import product_details
 
@@ -31,17 +32,12 @@ def getProdata(id):
         return p
 @csrf_exempt
 def getProductByID(request, proid):
-    data = {}
     resp = {}
     # This will fetch the data from the database.
+    print(proid)
     prodata = getProdata(proid)
     if prodata:
-        # data["Product id"] = prodata.get("product_id","");
-        #  product_id = models.CharField(max_length=10)
-        #     product_category = models.CharField(max_length=50)
-        #     product_name = models.CharField(max_length=100)
-        #     availability = models.CharField(max_length=15)
-        #     price
+        print(prodata)
         resp['status'] = 'Success'
         resp['status_code'] = '200'
         resp['data'] = prodata
@@ -50,3 +46,24 @@ def getProductByID(request, proid):
         resp['status_code'] = '400'
         resp['message'] = 'Data is not available.'
     return HttpResponse(json.dumps(resp), content_type='application/json')
+
+def getBookData(request):
+    url='http://127.0.0.1:8008/get_all_books'
+    headers= {'Content-Type' : 'application/json'}
+    response = requests.get(url, headers=headers)
+    book = json.loads(response.content.decode('utf-8'))
+    return HttpResponse(json.dumps(book), content_type='application/json')
+
+def getClotheData(request):
+    url='http://127.0.0.1:8009/get_all_clothes'
+    headers= {'Content-Type' : 'application/json'}
+    response = requests.get(url, headers=headers)
+    clothe = json.loads(response.content.decode('utf-8'))
+    return HttpResponse(json.dumps(clothe), content_type='application/json')
+
+def getShoeData(request):
+    url='http://127.0.0.1:8008/get_all_shoes'
+    headers= {'Content-Type' : 'application/json'}
+    response = requests.get(url, headers=headers)
+    shoe = json.loads(response.content.decode('utf-8'))
+    return HttpResponse(json.dumps(shoe), content_type='application/json')

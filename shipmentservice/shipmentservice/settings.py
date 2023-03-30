@@ -77,14 +77,12 @@ WSGI_APPLICATION = 'shipmentservice.wsgi.application'
 #
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'shipmentservice',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': 'mongodb+srv://ngochoai2001:ngochoai2001@cluster0.gewuaxv.mongodb.net/?retryWrites=true&w=majority',
-            'username': 'ngochoai2001',
-            'password': 'ngochoai2001',
-    },
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 # import mongoengine

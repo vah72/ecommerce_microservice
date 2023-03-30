@@ -1,1 +1,12 @@
 # microservice
+userservice 8000
+product 8001
+shipment 8002
+payment 8003
+comment 8004
+order 8005
+cart 8006
+image 8007
+book 8008
+clothe 8009
+shoe 8010

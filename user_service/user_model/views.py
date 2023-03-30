@@ -56,3 +56,15 @@ def registration_req(request):
         resp['status_code'] = '400'
         resp['message'] = 'All fields are mandatory.'
     return HttpResponse(json.dumps(resp), content_type='application/json')
+
+def getAllUser(request) :
+    resp = {}
+    data = []
+    if request.method == 'GET':
+        users = user_registration.objects.all()
+        for user in users.values():
+            data.append(user)
+            resp['status'] = 'Success'
+            resp['status_code'] = '200'
+            resp['data'] = data
+    return HttpResponse(json.dumps(resp), content_type='application/json')
