@@ -1,8 +1,8 @@
 from django.db import models
 
 class Order(models.Model):
-    username = models.CharField(max_length=50)
-    product_id = models.CharField(max_length=10)
-    total = models.FloatField()
+    user_id = models.IntegerField(default=1)
+    cart_id = models.IntegerField(default=1)
+    total = models.FloatField(default=0.0)
     shipment_id = models.IntegerField(default=1)
 

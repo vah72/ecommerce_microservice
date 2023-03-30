@@ -20,24 +20,20 @@ def getAllOrder(request) :
 
 @csrf_exempt
 def create_order(request):
-    print("Yes")
-    uname = request.POST.get("User Name")
-    pro_id = request.POST.get("Product Id")
-    total =  request.POST.get("Total")
+    user_id = request.POST.get("User Id")
+    cart_id = request.POST.get("Cart Id")
+    print(cart_id)
+    total =  getTotal(cart_id)
+    print(total)
     shipment_id = request.POST.get("Shipment Id")
     resp = {}
-    if uname and pro_id and total and shipment_id:
-        order = Order(username=uname, product_id=pro_id, total=total, shipment_id=shipment_id)
+    if user_id and cart_id and total and shipment_id:
+        order = Order(user_id=user_id, cart_id=cart_id, total=total, shipment_id=shipment_id)
         if order:
-            if checkProduct(pro_id):
-                order.save()
-                resp['status'] = 'Success'
-                resp['status_code'] = '200'
-                resp['message'] = 'Create a new order successfully'
-            else :
-                resp['status'] = 'Failed'
-                resp['status_code'] = '400'
-                resp['message'] = f"There is no product {pro_id}"
+            order.save()
+            resp['status'] = 'Success'
+            resp['status_code'] = '200'
+            resp['message'] = 'Create a new order successfully'
         else:
             resp['status'] = 'Failed'
             resp['status_code'] = '400'
@@ -46,7 +42,20 @@ def create_order(request):
         resp['status'] = 'Failed'
         resp['status_code'] = '400'
         resp['message'] = 'All fields are mandatory'
-    return HttpResponse(json.dumps(resp), content_type='application/json')
+    return HttpResponse(json.dumps(resp, default=str), content_type='application/json')
+
+def getTotal(card_id):
+    #get list product through api cart
+    url = 'http://127.0.0.1:8006/get_cart/{}'.format(card_id)
+    listItem = requests.get(url).json()['data']
+    product_id = listItem['product_id']
+    quantity = listItem['quantity']
+    url = 'http://127.0.0.1:8001/get_product_data/{}'.format(product_id)
+    product= requests.get(url).json()['data']
+    print(product)
+    price = float(product['price'])
+    return float(quantity)*price
+
 
 def checkProduct(id):
     url = 'http://127.0.0.1:8001/get_product_data/'

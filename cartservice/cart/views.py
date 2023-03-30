@@ -31,6 +31,21 @@ def getCartItemByUser(request,user_id):
         resp['data'] = data
     return HttpResponse(json.dumps(resp), content_type='application/json')
 
+
+def getCartItemById(request,cart_id):
+    resp = {}
+    data = []
+    cart_item = Cart.objects.filter(pk=cart_id).values()[0]
+    if cart_item :
+        resp['status'] = 'Success'
+        resp['status_code'] = '200'
+        resp['data'] = cart_item
+    else :
+        resp['status'] = 'Failed'
+        resp['status_code'] = '400'
+        resp['message'] = 'Not found cart'
+    return HttpResponse(json.dumps(resp), content_type='application/json')
+
 @csrf_exempt
 def add_to_cart(request):
     user_id = request.POST.get("User Id")
